@@ -1,5 +1,4 @@
 import { Formik } from 'formik';
-import { Component } from 'react';
 import { customAlphabet } from 'nanoid';
 import {
   FormWrap,
@@ -39,59 +38,50 @@ function validateNumber(number) {
   return error;
 }
 
-export class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
-
-  handleSubmit = (values, actions) => {
+export const ContactForm = ({ onSubmit }) => {
+  const handleSubmit = (values, actions) => {
     const id = nanoid();
     values.id = id;
-    this.props.onSubmit(values);
+    onSubmit(values);
     actions.resetForm();
   };
 
-  render() {
-    return (
-      <Formik
-        initialValues={{
-          name: this.state.name,
-          number: this.state.number,
-        }}
-        onSubmit={this.handleSubmit}
-      >
-        {({ errors, touched }) => (
-          <FormWrap autoComplete="off">
-            <FormLabel>
-              Name
-              <FormFeld
-                id="name"
-                name="name"
-                type="text"
-                validate={validateName}
-              />
-              {errors.name && touched.name && (
-                <ErrorMsg>{errors.name}</ErrorMsg>
-              )}
-            </FormLabel>
-            <FormLabel>
-              {' '}
-              Number
-              <FormFeld
-                id="number"
-                name="number"
-                type="tel"
-                validate={validateNumber}
-              />
-              {errors.number && touched.number && (
-                <ErrorMsg>{errors.number}</ErrorMsg>
-              )}
-            </FormLabel>
-            <FormButton type="submit">Add contact</FormButton>
-          </FormWrap>
-        )}
-      </Formik>
-    );
-  }
-}
+  return (
+    <Formik
+      initialValues={{
+        name: '',
+        number: '',
+      }}
+      onSubmit={handleSubmit}
+    >
+      {({ errors, touched }) => (
+        <FormWrap autoComplete="off">
+          <FormLabel>
+            Name
+            <FormFeld
+              id="name"
+              name="name"
+              type="text"
+              validate={validateName}
+            />
+            {errors.name && touched.name && <ErrorMsg>{errors.name}</ErrorMsg>}
+          </FormLabel>
+          <FormLabel>
+            {' '}
+            Number
+            <FormFeld
+              id="number"
+              name="number"
+              type="tel"
+              validate={validateNumber}
+            />
+            {errors.number && touched.number && (
+              <ErrorMsg>{errors.number}</ErrorMsg>
+            )}
+          </FormLabel>
+          <FormButton type="submit">Add contact</FormButton>
+        </FormWrap>
+      )}
+    </Formik>
+  );
+};
